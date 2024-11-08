@@ -34,7 +34,7 @@ Vagrant.configure("2") do |config|
   SHELL
 
   config.vm.provision "shell", name: "ftp" inline: <<-SHELL, run: "once"
-    
+    # Create a directory for the FTP server
     mkdir -p /home/ftpuser/ftp
   SHELL
 end
