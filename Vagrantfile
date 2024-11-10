@@ -5,18 +5,8 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", name: "update", inline: <<-SHELL
     apt-get update
     apt-get install -y nginx git vsftpd openssl
-    systemctl status nginx
 
-    cp -v /vagrant/mi_dominio /etc/nginx/sites-available/mi_dominio
-    ln -s /etc/nginx/sites-available/mi_dominio /etc/nginx/sites-enabled/
-    systemctl restart nginx
-
-    # apt-get install -y vsftpd
-  SHELL
-
-  # Provision the VM with Nginx and a static website
-  config.vm.provision "shell", name: "nginx" inline: <<-SHELL, run: "once"
-
+    # Configure Nginx
     # Create a directory for the web server
     mkdir -p /var/www/mi_web/html
 
@@ -27,14 +17,21 @@ Vagrant.configure("2") do |config|
     chown -R www-data:www-data /var/www/mi_web/html
     chmod -R 755 /var/www/mi_web
 
-    touch /etc/nginx/sites-available/mi_dominio
-    cp -v /etc/nginx/sites-available/mi_dominio /vagrant
+    cp -v /vagrant/mi_dominio /etc/nginx/sites-available/mi_dominio
+    ln -s /etc/nginx/sites-available/mi_dominio /etc/nginx/sites-enabled/
 
     systemctl restart nginx
-  SHELL
 
-  config.vm.provision "shell", name: "ftp" inline: <<-SHELL, run: "once"
-    # Create a directory for the FTP server
-    mkdir -p /home/ftpuser/ftp
+    # Configure the FTP server
+    mkdir -p /home/vagrant/ftp
+    sudo chown vagrant:vagrant /home/vagrant/ftp
+    sudo chmod 755 /home/vagrant/ftp
+
+    openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/vsftpd.key -out /etc/ssl/certs/vsftpd.crt -subj "/C=ES/ST=State/L=City/O=Organization/OU=Unit/CN=example.com"
+
+    # cp -v /etc/vsftpd.conf /vagrant
+    cp -v /vagrant/vsftpd.conf /etc/vsftpd.conf
+
+    systemctl restart vsftpd
   SHELL
 end
