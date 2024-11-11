@@ -1,0 +1,13 @@
+server {
+    listen 80;
+    listen [::]:80;
+
+    root /var/www/mi_sitio_personal/html;
+    index index.html index.htm index.nginx-debian.html;
+
+    server_name mi_sitio_personal.local;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+}
