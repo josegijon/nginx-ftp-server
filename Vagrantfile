@@ -3,18 +3,29 @@ Vagrant.configure("2") do |config|
   config.vm.network "private_network", ip: "192.168.33.10"
 
   config.vm.provision "shell", name: "update", inline: <<-SHELL
+    # Añadir contraseña para usuario vagrant
+    echo "vagrant:1234" | chpasswd
+
     # Actualizar e instalar paquetes
     apt-get update
     apt-get install -y nginx git vsftpd openssl
 
-    # Configurar Nginx
+    # Configurar Nginx para el sitio web existente
     mkdir -p /var/www/mi_web/html
     git clone https://github.com/cloudacademy/static-website-example /var/www/mi_web/html
     chown -R www-data:www-data /var/www/mi_web/html
+    chown -R vagrant:vagrant /var/www/mi_sitio_personal/html
     chmod -R 755 /var/www/mi_web
+    chmod -R 755 /var/www/mi_sitio_personal/html
     cp -v /vagrant/mi_dominio /etc/nginx/sites-available/mi_dominio
     ln -s /etc/nginx/sites-available/mi_dominio /etc/nginx/sites-enabled/
-    systemctl restart nginx
+
+    # Crear directorio para el nuevo sitio web
+    mkdir -p /var/www/mi_sitio_personal/html
+    chown -R www-data:www-data /var/www/mi_sitio_personal
+    chmod -R 755 /var/www/mi_sitio_personal
+    cp -v /vagrant/mi_sitio_personal /etc/nginx/sites-available/
+    ln -s /etc/nginx/sites-available/mi_sitio_personal /etc/nginx/sites-enabled/
 
     # Configurar FTPS
     mkdir -p /home/vagrant/ftp
@@ -27,7 +38,8 @@ Vagrant.configure("2") do |config|
     # Copiar configuración de FTPS
     cp -v /vagrant/vsftpd.conf /etc/vsftpd.conf
 
-    # Reiniciar servicio FTPS
+    # Reiniciar servicios
+    systemctl restart nginx
     systemctl restart vsftpd
   SHELL
 end
