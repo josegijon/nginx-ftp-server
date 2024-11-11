@@ -14,23 +14,28 @@ Vagrant.configure("2") do |config|
     mkdir -p /var/www/mi_web/html
     git clone https://github.com/cloudacademy/static-website-example /var/www/mi_web/html
     chown -R www-data:www-data /var/www/mi_web/html
-    chown -R vagrant:vagrant /var/www/mi_sitio_personal/html
     chmod -R 755 /var/www/mi_web
-    chmod -R 755 /var/www/mi_sitio_personal/html
-    cp -v /vagrant/mi_dominio /etc/nginx/sites-available/mi_dominio
-    ln -s /etc/nginx/sites-available/mi_dominio /etc/nginx/sites-enabled/
+    # chown -R vagrant:vagrant /var/www/mi_sitio_personal/html
 
     # Crear directorio para el nuevo sitio web
     mkdir -p /var/www/mi_sitio_personal/html
-    chown -R www-data:www-data /var/www/mi_sitio_personal
-    chmod -R 755 /var/www/mi_sitio_personal
+    chown -R vagrant:www-data /var/www/mi_sitio_personal/html 
+    chmod -R 755 /var/www/mi_sitio_personal/html
+
+    # Configurar Nginx
+    cp -v /vagrant/mi_dominio /etc/nginx/sites-available/mi_dominio
     cp -v /vagrant/mi_sitio_personal /etc/nginx/sites-available/
+    ln -s /etc/nginx/sites-available/mi_dominio /etc/nginx/sites-enabled/
     ln -s /etc/nginx/sites-available/mi_sitio_personal /etc/nginx/sites-enabled/
+
+
+    # chown -R www-data:www-data /var/www/mi_sitio_personal
+    # chmod -R 755 /var/www/mi_sitio_personal
 
     # Configurar FTPS
     mkdir -p /home/vagrant/ftp
-    sudo chown vagrant:vagrant /home/vagrant/ftp
-    sudo chmod 755 /home/vagrant/ftp
+    chown vagrant:vagrant /home/vagrant/ftp
+    chmod 755 /home/vagrant/ftp
 
     # Generar certificado SSL para FTPS
     openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/vsftpd.key -out /etc/ssl/certs/vsftpd.crt -subj "/C=ES/ST=State/L=City/O=Organization/OU=Unit/CN=example.com"

@@ -1,0 +1,7 @@
+¿Qué pasa si no hago el link simbólico entre sites-available y sites-enabled de mi sitio web?
+
+-Nginx no reconocerá ni servirá el sitio web.
+-Tu configuración permanecerá en sites-available, pero será ignorada por Nginx.
+-Cuando reinicies o recargues Nginx, no se aplicará la configuración de tu sitio.
+
+Nginx solo lee las configuraciones que están en el directorio sites-enabled cuando inicia o se recarga. El uso de enlaces simbólicos permite una gestión más flexible de los sitios, ya que puedes tener configuraciones en sites-available y activarlas o desactivarlas fácilmente creando o eliminando enlaces en sites-enabled. 

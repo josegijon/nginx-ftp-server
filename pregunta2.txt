@@ -1,0 +1,7 @@
+¿Qué pasa si no le doy los permisos adecuados a /var/www/nombre_web?
+
+Si no asignas los permisos adecuados al directorio /var/www/nombre_web, pueden ocurrir varios problemas:
+
+-Nginx podría no tener acceso de lectura a los archivos, resultando en errores 403 (Forbidden) cuando los usuarios intenten acceder al sitio.
+-Si los permisos son demasiado permisivos (por ejemplo, 777), esto podría representar un riesgo de seguridad, permitiendo a otros usuarios o procesos modificar los archivos del sitio web.
+-Si el propietario y grupo no están configurados correctamente, podrías tener problemas con la ejecución de scripts o la escritura de archivos (por ejemplo, para cargas de archivos o cachés).
