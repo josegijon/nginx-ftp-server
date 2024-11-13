@@ -15,7 +15,6 @@ Vagrant.configure("2") do |config|
     git clone https://github.com/cloudacademy/static-website-example /var/www/mi_web/html
     chown -R www-data:www-data /var/www/mi_web/html
     chmod -R 755 /var/www/mi_web
-    # chown -R vagrant:vagrant /var/www/mi_sitio_personal/html
 
     # Crear directorio para el nuevo sitio web
     mkdir -p /var/www/mi_sitio_personal/html
@@ -23,14 +22,10 @@ Vagrant.configure("2") do |config|
     chmod -R 755 /var/www/mi_sitio_personal/html
 
     # Configurar Nginx
-    cp -v /vagrant/mi_dominio /etc/nginx/sites-available/mi_dominio
-    cp -v /vagrant/mi_sitio_personal /etc/nginx/sites-available/
+    cp -v /vagrant/config/mi_dominio /etc/nginx/sites-available/mi_dominio
+    cp -v /vagrant/config/mi_sitio_personal /etc/nginx/sites-available/
     ln -s /etc/nginx/sites-available/mi_dominio /etc/nginx/sites-enabled/
     ln -s /etc/nginx/sites-available/mi_sitio_personal /etc/nginx/sites-enabled/
-
-
-    # chown -R www-data:www-data /var/www/mi_sitio_personal
-    # chmod -R 755 /var/www/mi_sitio_personal
 
     # Configurar FTPS
     mkdir -p /home/vagrant/ftp
@@ -41,7 +36,7 @@ Vagrant.configure("2") do |config|
     openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/vsftpd.key -out /etc/ssl/certs/vsftpd.crt -subj "/C=ES/ST=State/L=City/O=Organization/OU=Unit/CN=example.com"
 
     # Copiar configuración de FTPS
-    cp -v /vagrant/vsftpd.conf /etc/vsftpd.conf
+    cp -v /vagrant/config/vsftpd.conf /etc/vsftpd.conf
 
     # Reiniciar servicios
     systemctl restart nginx
