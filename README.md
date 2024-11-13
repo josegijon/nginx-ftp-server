@@ -206,10 +206,10 @@ http://mi_sitio_personal.local
 
 Conexión mediante FileZilla:
 
-·Host: 192.168.33.10
-·Usuario: vagrant
-·Contraseña: 1234
-·Puerto: 21
+   - Host: 192.168.33.10
+   - Puerto: 21
+   - Usuario: vagrant
+   - Contraseña: 1234
 
 ## Notas de Seguridad
 
